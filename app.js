@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 const usersRoute = require("./routes/usersRoute");
 const carsRoute = require("./routes/carsRoute");
 const sparepartsRoute = require("./routes/sparepartsRoute");
@@ -7,8 +8,32 @@ const driverRoutes = require("./routes/driverRoute");
 const app = express();
 const port = 3000;
 
-// Reading json from body (client)
+// Middleware
 app.use(express.json());
+
+// Logging Middleware Morgan
+app.use(morgan());
+
+// Middleware Morgan
+app.use((req, res, next) => {
+  console.log(`incoming request: ${req.method} ${req.url}`);
+
+  next();
+});
+
+app.use((req, res, next) => {
+  // Logging basic
+  req.requestTime = new Date().toISOString();
+
+  next();
+});
+
+app.use((req, res, next) => {
+  // Logging basic
+  req.username = "FSW 2";
+
+  next();
+});
 
 // Health Check
 app.get("/", async (req, res) => {
