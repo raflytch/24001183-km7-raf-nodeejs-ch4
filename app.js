@@ -11,7 +11,7 @@ const port = 3000;
 // Middleware
 app.use(express.json());
 
-// Logging Middleware Morgan
+// Logging Middleware Morganen
 app.use(morgan());
 
 // Middleware Morgan
