@@ -1,4 +1,5 @@
 const { Car } = require("../models");
+const imagekit = require("../lib/imagekit");
 
 async function getAllCars(req, res) {
   try {
@@ -121,24 +122,50 @@ async function updateCar(req, res) {
   }
 }
 
-async function createCar(req, res) {
+async function createCar(req, res, next) {
+  // console.log(req.file);
   const { plate, model, type, year } = req.body;
 
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({
+      status: "Failed",
+      message: "Failed to add car data because file not define",
+      isSuccess: false,
+      data: null,
+    });
+  }
+
   try {
-    const newCar = await Car.create({ plate, model, type, year });
+    const uploadedCarsPhotos = [];
+
+    for (let i = 0; i < req.files.length; i++) {
+      const split = req.files[i].originalname.split(".");
+      const ext = split[split.length - 1];
+      const filename = `Car-${Date.now()}.${ext}`;
+
+      const uploadedImages = await imagekit.upload({
+        file: req.files[i].buffer,
+        fileName: filename,
+      });
+
+      uploadedCarsPhotos.push(uploadedImages.url);
+    }
+
+    const newCar = await Car.create({
+      plate,
+      model,
+      type,
+      year,
+      images: uploadedCarsPhotos,
+    });
     res.status(200).json({
       status: "Success",
       message: "Ping successfully",
       isSuccess: true,
-      data: { newCar },
+      data: newCar,
     });
   } catch (error) {
-    res.status(500).json({
-      status: "500",
-      message: "Failed to get cars data",
-      isSuccess: false,
-      error: error.message,
-    });
+    next(error);
   }
 }
 

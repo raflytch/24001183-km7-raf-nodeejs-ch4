@@ -125,7 +125,7 @@ async function UpdateUserById(req, res) {
 }
 
 async function createUser(req, res) {
-  console.log(req.file);
+  // console.log(req.file);
   //   Processing File
   const split = req.file.originalname.split(".");
   const ext = split[split.length - 1];

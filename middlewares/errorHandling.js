@@ -4,6 +4,8 @@ const errorHandling = (err, req, res, next) => {
     message: "Internal server error",
     serverMessage: err.message,
   });
+
+  next();
 };
 
 module.exports = errorHandling;

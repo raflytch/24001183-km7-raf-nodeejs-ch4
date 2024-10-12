@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controller/userController");
 const upload = require("../middlewares/uploader");
-const errorHandling = require("../middlewares/errorHandling");
 
 // API for get all users data
 router.get("/", userController.getAllUser);

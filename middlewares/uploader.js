@@ -8,7 +8,7 @@ const multerFilter = (req, file, cb) => {
     cb(null, true);
   } else {
     console.log("Invalid image file format type");
-    throw new Error("Invalid image file format type");
+    cb(new Error("Invalid image file format type"), false);
   }
 };
 
