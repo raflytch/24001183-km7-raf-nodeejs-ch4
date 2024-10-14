@@ -12,7 +12,10 @@ const multerFilter = (req, file, cb) => {
   }
 };
 
+const storage = multer.memoryStorage();
+
 const upload = multer({
+  storage: storage,
   fileFilter: multerFilter,
   //   dest: "public/images/users",
 });

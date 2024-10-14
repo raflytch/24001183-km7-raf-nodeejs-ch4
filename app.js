@@ -5,12 +5,14 @@ const carsRoute = require("./routes/carsRoute");
 const sparepartsRoute = require("./routes/sparepartsRoute");
 const driverRoutes = require("./routes/driverRoute");
 const errorHandling = require("./middlewares/errorHandling");
+const dashboardRoutes = require("./routes/dashboardRoute");
 
 const app = express();
 const port = 3000;
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // Logging Middleware Morganen
 app.use(morgan());
@@ -36,6 +38,23 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middleware baca static file
+app.use(express.static(`${__dirname}/public`));
+
+// Panggil View Engine
+
+app.set("view engine", "ejs");
+
+// app.get("/dashboard/admin", async (req, res) => {
+//   try {
+//     res.render("index", {
+//       greeting: "Hello FSW 2 dengan data dinamis kalian luar biasa",
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
 // Health Check
 app.get("/", async (req, res) => {
   try {
@@ -54,7 +73,10 @@ app.get("/", async (req, res) => {
   }
 });
 
-// Routes
+// Dashboard routes
+app.use("/dashboard/admin", dashboardRoutes);
+
+// Routes API
 app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/cars", carsRoute);
 app.use("/api/v1/spareparts", sparepartsRoute);
