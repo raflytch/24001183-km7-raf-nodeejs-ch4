@@ -1,4 +1,5 @@
 const express = require("express");
+const expressEJSLayout = require("express-ejs-layouts");
 const morgan = require("morgan");
 const usersRoute = require("./routes/usersRoute");
 const carsRoute = require("./routes/carsRoute");
@@ -44,6 +45,8 @@ app.use(express.static(`${__dirname}/public`));
 // Panggil View Engine
 
 app.set("view engine", "ejs");
+app.use(expressEJSLayout);
+app.set("layout", "layout");
 
 // app.get("/dashboard/admin", async (req, res) => {
 //   try {
